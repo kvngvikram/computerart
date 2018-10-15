@@ -7,6 +7,7 @@ iterations = 3		# positive integer
 p = 2 			# parameter
 
 import numpy as np 
+import matplotlib.pyplot as plt
 
 # Trying to make a complex plane
 
@@ -19,13 +20,16 @@ c = mgx + mgy * 1j
 z = c*0
 
 
-
+# Function that calculates the next iteration
 def iter(z,c,p):
 	return z**p+c
 
+# while loop for iterations
 i = 0
 while i < iterations : 
 	z = iter(z,c,p)
-	print(z)
-	i = i+1 
-
+	zabs = np.absolute(z) 		# calculating the absolute value
+	normz = zabs*255.0/np.max(zabs)	# normalising from 0-255
+	print(normz)
+	i = i+1
+	
