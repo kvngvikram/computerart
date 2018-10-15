@@ -1,9 +1,11 @@
-x_range = 2		# positive
-y_range = 2 		# positive
+xmin = -2	
+xmax = 1 
+ymin = -2 
+ymax = 2 
 
-resolution = 5	 	# positive integer
-
-iterations = 3		# positive integer
+xresolution = 15
+yresolution = 21
+iterations = 8		# positive integer
 p = 2 			# parameter
 threshold = 2 
 
@@ -11,8 +13,8 @@ import numpy as np
 
 # Trying to make a complex plane
 
-x = np.linspace(-x_range,y_range,resolution)
-y = np.linspace(-y_range,y_range,resolution)
+x = np.linspace(xmin,xmax,xresolution)
+y = np.linspace(ymin,ymax,yresolution)
 
 mgx , mgy = np.meshgrid(x,y)
 
