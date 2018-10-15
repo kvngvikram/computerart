@@ -5,9 +5,9 @@ resolution = 5	 	# positive integer
 
 iterations = 3		# positive integer
 p = 2 			# parameter
+threshold = 2 
 
 import numpy as np 
-import matplotlib.pyplot as plt
 
 # Trying to make a complex plane
 
@@ -29,7 +29,7 @@ i = 0
 while i < iterations : 
 	z = iter(z,c,p)
 	zabs = np.absolute(z) 		# calculating the absolute value
-	normz = zabs*255.0/np.max(zabs)	# normalising from 0-255
-	print(normz)
+	flag = zabs>threshold
 	i = i+1
-	
+
+print(flag.astype(float))	
