@@ -1,13 +1,14 @@
-xmin = -2	
-xmax = 0.5
-ymin = -1 
-ymax = 1
+xmin = -4	
+xmax = 1.5
+ymin = -1.5 
+ymax = 1.5
 
 iterations = 30		# positive integer
 p = 2 			# parameter
 threshold = 2 
 
 dynamic = True
+pausetime = 0.05 	# sec
 
 xresolution = 1+2000
 # yresolution can be set such that spaceing is same as of x or custiom can be commented out
@@ -43,32 +44,53 @@ i = 0
 while i < iterations : 
 	z = iter(z,c,p)
 	i = i+1
-
+	
 	if dynamic:	
 		zabs = np.absolute(z) 		# calculating the absolute value
 		nanflag = np.isnan(zabs)	# checking for infinite values (NaN)
 		thresholdflag = (zabs>threshold)# if absolute value threshold is reached
 		# NaN values are considered to be greater than threshold
 		flag = np.logical_or(nanflag,thresholdflag) 
-	
+		flag = np.logical_not(flag) 	# this is flag for the set
+		
+		# first term :- NaN values in zabs are set max possible value
+		# second term:- non NaN values and not in set values are taken unaltered. Yet nan_to_num is used to remove NaN values. nan*0 = nan 
+		# therd term :- terms in set are assigned one and later log(1) = 0 while plotting			
+		m = np.nan_to_num(np.inf)*nanflag.astype(float) + np.nan_to_num(zabs)*(1-nanflag.astype(float))*(1-flag.astype(float)) + flag.astype(float)
+
 		plt.clf()
-		plt.imshow(flag.astype(float),extent=[xmin,xmax,ymin,ymax])
+		# doing a log plot 
+		plt.imshow(np.log(m),extent=[xmin,xmax,ymin,ymax])
+		
+		# for boolean plot of set comment above plot statement and uncomment below 
+		#plt.imshow(flag.astype(float),extent=[xmin,xmax,ymin,ymax])
 		plt.xlabel("Real axis")
 		plt.ylabel("Complex axis")
 		plt.title("iteration number :"+str(i))
 		plt.show(block=False)
-		plt.pause(0.1)
-	
+		plt.pause(pausetime)
 
+if not dynamic:
+	zabs = np.absolute(z) 		# calculating the absolute value
+	nanflag = np.isnan(zabs)	# checking for infinite values (NaN)
+	thresholdflag = (zabs>threshold)# if absolute value threshold is reached
+	# NaN values are considered to be greater than threshold
+	flag = np.logical_or(nanflag,thresholdflag) 
+	flag = np.logical_not(flag) 	# this is flag for the set
 
-zabs = np.absolute(z) 		
-nanflag = np.isnan(zabs)
-thresholdflag = (zabs>threshold)
-flag = np.logical_or(nanflag,thresholdflag)
+	# first term :- NaN values in zabs are set max possible value
+	# second term:- non NaN values and not in set values are taken unaltered. Yet nan_to_num is used to remove NaN values. nan*0 = nan 
+	# therd term :- terms in set are assigned one and later log(1) = 0 while plotting			
+	m = np.nan_to_num(np.inf)*nanflag.astype(float) + np.nan_to_num(zabs)*(1-nanflag.astype(float))*(1-flag.astype(float)) + flag.astype(float)
 	
-plt.clf()
-plt.imshow(flag.astype(float),extent=[xmin,xmax,ymin,ymax])
-plt.xlabel("Real axis")
-plt.ylabel("Complex axis")
-plt.title("iteration number :"+str(i))
+	plt.clf()
+	# doing a log plot
+	plt.imshow(np.log(m),extent=[xmin,xmax,ymin,ymax])
+	
+	# for boolean plot of set comment above plot statement and uncomment below 
+	#plt.imshow(flag.astype(float),extent=[xmin,xmax,ymin,ymax])
+	plt.xlabel("Real axis")
+	plt.ylabel("Complex axis")
+	plt.title("iteration number :"+str(i))
+
 plt.show()
