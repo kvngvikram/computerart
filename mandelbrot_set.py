@@ -5,7 +5,7 @@ ymax = 1.5
 
 xresolution = 1+2000
 yresolution = 1+1500
-iterations = 8		# positive integer
+iterations = 40		# positive integer
 p = 2 			# parameter
 threshold = 2 
 
@@ -31,10 +31,12 @@ def iter(z,c,p):
 i = 0
 while i < iterations : 
 	z = iter(z,c,p)
-	zabs = np.absolute(z) 		# calculating the absolute value
-	flag = zabs>threshold
 	i = i+1
 
+zabs = np.absolute(z) 		# calculating the absolute value
+nanflag = np.isnan(zabs)
+thresholdflag = (zabs>threshold)
+flag = np.logical_or(nanflag,thresholdflag)
 
 plt.imshow(flag.astype(float),extent=[xmin,xmax,ymin,ymax])
 plt.show()
