@@ -1,15 +1,16 @@
-xmin = -2	
+xmin = -3	
 xmax = 1 
-ymin = -2 
-ymax = 2 
+ymin = -1.5 
+ymax = 1.5
 
-xresolution = 15
-yresolution = 21
+xresolution = 1+2000
+yresolution = 1+1500
 iterations = 8		# positive integer
 p = 2 			# parameter
 threshold = 2 
 
 import numpy as np 
+import matplotlib.pyplot as plt 
 
 # Trying to make a complex plane
 
@@ -34,4 +35,6 @@ while i < iterations :
 	flag = zabs>threshold
 	i = i+1
 
-print(flag.astype(float))	
+
+plt.imshow(flag.astype(float),extent=[xmin,xmax,ymin,ymax])
+plt.show()
