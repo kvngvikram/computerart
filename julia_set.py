@@ -3,14 +3,16 @@ xmax = 1.5
 ymin = -1.5 
 ymax = 1.5
 
+c_value = 3
 iterations = 30		# positive integer
-p = 2 			# parameter
+p = 3j 			# parameter
 threshold = 2 
 
-dynamic = True
+
+dynamic = False
 pausetime = 0.05 	# sec
 
-xresolution = 1+200
+xresolution = 1+2000
 
 #Note: spyder users need to enter the following command(without '#') before running the code 
 # %matplotlib auto
@@ -35,8 +37,8 @@ y = np.linspace(ymin,ymax,yresolution)
 
 mgx , mgy = np.meshgrid(x,y)
 
-c = mgx + mgy * 1j
-z = c*0
+z = mgx + mgy * 1j
+c = z*c_value
 
 
 # Function that calculates the next iteration
