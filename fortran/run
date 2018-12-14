@@ -1,0 +1,5 @@
+in_file=trail.f
+out_file=temp.out
+gfortran -ffree-form $in_file -o $out_file
+./$out_file
+rm $out_file
