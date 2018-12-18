@@ -16,26 +16,15 @@ unsigned int yres;
 using namespace std;
 
 void my_product(long double * pc , long double * pa , long double * pb ) ; 
-//void input_check(float xmin , float xmax , float ymin , float ymax , unsigned int xres , unsigned int yres , long double zr , long double zi) ; 
+void input_check(float * pxmin , float * pxmax , float * pymin , float * pymax , unsigned int * pxres , unsigned int * pyres , long double * pzr , long double * pzi) ; 
 
 int main(){
 
-	
-	if (ymin>ymax){
-		ymax = ymax + ymin ; 
-		ymin = ymax - ymin ;
-		ymax = ymax - ymin ; 		
-	}
-	
-	if (xmin>xmax){
-		xmax = xmax + xmin ; 
-		xmin = xmax - xmin ;
-		xmax = xmax - xmin ; 		
-	}
-	cout<<"The range is"<<'\t'<<xmin<<'\t'<<xmax<<'\t'<<ymin<<'\t'<<ymax<<endl;
+	input_check( &xmin , &xmax , &ymin , &ymax , &xres , &yres , &zr , &zi);
+
 	
 	yres = float(xres)*(ymax-ymin)/(xmax-xmin);
-	cout<<"The resolutions for x and y are "<<xres<<" and "<<yres<<endl;
+	cout<<"\tThe resolutions for x and y are "<<xres<<" and "<<yres<<endl;
 
 	long double c[yres][xres][2] ;
 	long double * pc = &c[0][0][0] ;
@@ -97,3 +86,30 @@ void my_product(long double * pc , long double * pa , long double * pb ) {
 		}
 	} 	
 }
+
+
+void input_check(float * pxmin , float * pxmax , float * pymin , float * pymax , unsigned int * pxres , unsigned int * pyres , long double * pzr , long double * pzi) {
+
+	cout<<"\tchecking "<<endl;
+
+	cout<<"\tThe range is"<<'\t'<<*pxmin<<'\t'<<*pxmax<<'\t'<<*pymin<<'\t'<<*pymax<<endl;
+
+	if (*pymin>*pymax){
+		*pymax = *pymax + *pymin ; 
+		*pymin = *pymax - *pymin ;
+		*pymax = *pymax - *pymin ; 
+		
+		cout<<"\tY range swapped"<<endl;
+	}
+	
+	if (*pxmin>*pxmax){
+		*pxmax = *pxmax + *pxmin ; 
+		*pxmin = *pxmax - *pxmin ;
+		*pxmax = *pxmax - *pxmin ;
+		
+		cout<<"\tX range swapped"<<endl;	
+	}
+	
+	cout<<"\tThe range is"<<'\t'<<*pxmin<<'\t'<<*pxmax<<'\t'<<*pymin<<'\t'<<*pymax<<endl;
+	
+} 
