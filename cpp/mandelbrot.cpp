@@ -2,7 +2,10 @@
 
 using namespace std;
 
-//long double my_complex_multiply(long double a , long double b );
+long double* my_complex_multiply(long double* a , long double* b ){
+	
+	return a;	
+}
 
 int main(){
 
@@ -31,15 +34,17 @@ int main(){
 	cout<<"The resolutions for x and y are "<<xres<<" and "<<yres<<endl;
 
 	//long double c[yres][xres][2] ;
-	//long double c = 1 ; 
+	long double a[3]={1,4,3} , b[3]={1,2,3}  ; 
+	long double *pa = &a[0] , *pb = &b[0] ;
+	cout<<*(pa+1)<<endl;
+	long double *pc = pa;
+	cout<<*(pc+2)<<endl; 
 
+	
+	//long double pc =  c ; 
 	//c  = my_complex_multiply(c,c);
    
 }
 
-/*
-long double my_complex_multiply(long double a , long double b ){
-	
-	return a;	
-}
-*/
+
+
