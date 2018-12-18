@@ -14,11 +14,11 @@ int main(){
 	float xmax = -3  ;
 	float ymin = -1 ; 
 	float ymax = 2  ;
-	unsigned int xres = 3 ; 
+	unsigned int xres = 12 ; 
 	long double zr = 0 ;
 	long double zi = 0 ;
-	long double div_lim = 1000 ; 
-	unsigned int max_iter = 20 ; 
+	long double div_lim = 10000 ; 
+	unsigned int max_iter = 30 ; 
  
 	unsigned int yres; 
 	
@@ -28,12 +28,12 @@ int main(){
 
 	long double c[yres][xres][2]  , z[yres][xres][2] , absz[yres][xres] ;
 	unsigned int itn[yres][xres] ; 
-	bool flag[yres][xres]  , flag2[yres][xres] ; 
+	bool flag1[yres][xres]  , flag2[yres][xres] ; 
 
 	long double* pc = &c[0][0][0] , * pz = &z[0][0][0];
 	prepare_c(pc , &xres , &yres , &xmin , &xmax , &ymin , &ymax);
 	prepare_z(pz , &xres , &yres , &zr , &zi );
-	prepare_false_flag( &flag[0][0] , &xres , &yres);
+	prepare_false_flag( &flag1[0][0] , &xres , &yres);
 	prepare_false_flag( &flag2[0][0] , &xres , &yres);
 
 	 
@@ -48,14 +48,18 @@ int main(){
 				for(unsigned int i = 0 ; i < xres ; i++ ){	
 			//	z = z^2 + c 
 				z[j][i][0] = pow( z[j][i][0] , 2) - pow( z[j][i][1] , 2) + c[j][i][0]; 
-				z[j][i][1] = 2*z[j][i][0]*z[j][i][1] + c[j][i][0];
-				absz[j][i] = pow( ( pow(z[j][i][0] , 2) + pow(z[j][i][1] ,2) ) , 0.5)*float( ! flag[j][i]) + absz[j][i]*float(flag[j][i]);
+				z[j][i][1] = 2*z[j][i][0]*z[j][i][1] + c[j][i][1];
+
+				//cout<<'\t'<<absz[j][i] ;
+				absz[j][i] = pow( ( pow(z[j][i][0] , 2) + pow(z[j][i][1] ,2) ) , 0.5)*float( ! flag1[j][i]) + absz[j][i]*float(flag1[j][i]);
 				
-				flag[j][i] = absz[j][i] > div_lim ; 
-				
-				itn[j][i] = itn[j][i]*float( flag[j][i] )  + n*float( ! flag[j][i] )  ;  	
-				
-				cout<<flag[j][i]; 
+				flag1[j][i] = absz[j][i] > div_lim ; 
+			
+				if( ! flag1[j][i] && ! flag2[j][i] )itn[j][i] = n; 
+				else flag2[j][i] = true; 
+
+				//cout<<itn[j][i]<<'\t'<<flag2[j][i]<<'\t';
+				cout<<flag2[j][i];
 			}
 		}
 		n++;
