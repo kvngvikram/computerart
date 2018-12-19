@@ -28,12 +28,15 @@ int main(){
 
 	long double* p1 = (long double*) malloc(sizeof(long double[1000][34]));
 
-	long double c[yres][xres][2]  , z[yres][xres][2] , absz[yres][xres] ;
 	cout<<"defined arrays "<<endl;
 	unsigned int itn[yres][xres] ; 
 	bool flag1[yres][xres]  , flag2[yres][xres] ; 
 
-	long double* pc = &c[0][0][0] , * pz = &z[0][0][0] , * pabsz = &absz[0][0] ;
+	long double* pc = (long double*) malloc(sizeof(long double[yres][xres][2]));
+	long double* pz = (long double*) malloc(sizeof(long double[yres][xres][2]));
+	long double* pabsz = (long double*) malloc(sizeof(long double[yres][xres]));
+	
+	//long double* pc = &c[0][0][0] , * pz = &z[0][0][0] , * pabsz = &absz[0][0] ;
 	prepare_c(pc , &xres , &yres , &xmin , &xmax , &ymin , &ymax);
 	prepare_z(pz , &xres , &yres , &zr , &zi );
 	prepare_false_flag( &flag1[0][0] , &xres , &yres);
@@ -48,7 +51,7 @@ int main(){
 	unsigned int n = 0 ; 
 	while ( n < max_iter){
 		for(unsigned int j = 0 ;  j < yres ; j++ ){
-				for(unsigned int i = 0 ; i < xres ; i++ ){	
+			for(unsigned int i = 0 ; i < xres ; i++ ){	
 				
 				long double zr = *(pz + xres*2*j + 2*i + 0) , zi = *(pz + xres*2*j + 2*i + 1) ;
 				long double cr = *(pc + xres*2*j + 2*i + 0) , ci = *(pc + xres*2*j + 2*i + 1) ;
@@ -78,7 +81,9 @@ int main(){
 	
 	cout<<endl<<endl;
 	free(p1);
-
+	free(pz);
+	free(pc);
+	free(pabsz);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
