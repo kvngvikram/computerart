@@ -14,10 +14,10 @@ int main(){
 	float xmax = -3  ;
 	float ymin = -1 ; 
 	float ymax = 2  ;
-	unsigned int xres = 12 ; 
+	unsigned int xres = 10 ; 
 	long double zr = 0 ;
 	long double zi = 0 ;
-	long double div_lim = 10000 ; 
+	long double div_lim = 100000 ; 
 	unsigned int max_iter = 30 ; 
  
 	unsigned int yres; 
@@ -26,11 +26,14 @@ int main(){
 
 	yres = float(xres)*(ymax-ymin)/(xmax-xmin);
 
+	long double* p1 = (long double*) malloc(sizeof(long double[1000][34]));
+
 	long double c[yres][xres][2]  , z[yres][xres][2] , absz[yres][xres] ;
+	cout<<"defined arrays "<<endl;
 	unsigned int itn[yres][xres] ; 
 	bool flag1[yres][xres]  , flag2[yres][xres] ; 
 
-	long double* pc = &c[0][0][0] , * pz = &z[0][0][0];
+	long double* pc = &c[0][0][0] , * pz = &z[0][0][0] , * pabsz = &absz[0][0] ;
 	prepare_c(pc , &xres , &yres , &xmin , &xmax , &ymin , &ymax);
 	prepare_z(pz , &xres , &yres , &zr , &zi );
 	prepare_false_flag( &flag1[0][0] , &xres , &yres);
@@ -46,20 +49,27 @@ int main(){
 	while ( n < max_iter){
 		for(unsigned int j = 0 ;  j < yres ; j++ ){
 				for(unsigned int i = 0 ; i < xres ; i++ ){	
+				
+				long double zr = *(pz + xres*2*j + 2*i + 0) , zi = *(pz + xres*2*j + 2*i + 1) ;
+				long double cr = *(pc + xres*2*j + 2*i + 0) , ci = *(pc + xres*2*j + 2*i + 1) ;
+				long double labs = *(pabsz + xres*j + i) ;
 			//	z = z^2 + c 
-				z[j][i][0] = pow( z[j][i][0] , 2) - pow( z[j][i][1] , 2) + c[j][i][0]; 
-				z[j][i][1] = 2*z[j][i][0]*z[j][i][1] + c[j][i][1];
+				zr = pow( zr , 2) - pow( zi , 2) + cr; 
+				zi = 2*zr*zi + ci;
 
 				//cout<<'\t'<<absz[j][i] ;
-				absz[j][i] = pow( ( pow(z[j][i][0] , 2) + pow(z[j][i][1] ,2) ) , 0.5)*float( ! flag1[j][i]) + absz[j][i]*float(flag1[j][i]);
+				labs = pow( ( pow(zr , 2) + pow(zi ,2) ) , 0.5)*float( ! flag1[j][i]) + labs*float(flag1[j][i]);
 				
-				flag1[j][i] = absz[j][i] > div_lim ; 
+				flag1[j][i] = labs > div_lim ; 
 			
 				if( ! flag1[j][i] && ! flag2[j][i] )itn[j][i] = n; 
 				else flag2[j][i] = true; 
 
-				//cout<<itn[j][i]<<'\t'<<flag2[j][i]<<'\t';
-				cout<<flag2[j][i];
+				cout<<itn[j][i]<<'\t';
+				//cout<<flag2[j][i];
+				*(pz + xres*2*j + 2*i + 0) = zr ;
+				*(pz + xres*2*j + 2*i + 1) = zi ; 
+				*(pabsz + xres*j + i) = labs ;  
 			}
 		}
 		n++;
@@ -67,6 +77,7 @@ int main(){
 	}
 	
 	cout<<endl<<endl;
+	free(p1);
 
 }
 
