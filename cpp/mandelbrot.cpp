@@ -17,7 +17,7 @@ int main(){
 	long double zr_value = 0 ;
 	long double zi_value = 0 ;
 	long double div_lim = 10000 ; 
-	unsigned int max_iter = 30 ; 
+	unsigned int max_iter = 3 ; 
  
 	unsigned int yres; 
 	
