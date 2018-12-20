@@ -13,7 +13,7 @@ int main(){
 	float xmax = -3  ;
 	float ymin = -1 ; 
 	float ymax = 2  ;
-	unsigned int xres = 10000 ; 
+	unsigned int xres = 4000 ; 
 	long double zr_value = 0 ;
 	long double zi_value = 0 ;
 	long double div_lim = 10000 ; 
@@ -46,7 +46,8 @@ int main(){
 	//my_add(pz,pz,pc,&xres,&yres);
 	
 	//cout<<endl<<endl;
-
+	
+	
 	long double zr , zi , cr , ci , labs ; 
 	unsigned int litn ; 
 	bool lf1 , lf2 ; 
@@ -74,7 +75,7 @@ int main(){
 				if( ! lf1 && ! lf2 ) litn = n; 
 				else lf2 = true; 
 
-				cout<<litn<<'\t';
+//				cout<<litn<<'\t';
 				//cout<<lf2;
 
 				*(pz + xres*2*j + 2*i + 0) = zr ;
@@ -83,10 +84,13 @@ int main(){
 				*(pitn + xres*j + i) = litn; 
 				*(pf1 + xres*j + i) = lf1 ;
 				*(pf2 + xres*j + i) = lf2 ; 
+				
+		//		cout<<i<<endl;
 			}
+		//	while(true); 
 		}
 		n++;
-		cout<<endl;
+		cout<<"\tIteration number is   :  "<<n<<endl;
 	}
 	cout<<endl<<endl;
 	free(pz);

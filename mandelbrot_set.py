@@ -10,7 +10,7 @@ threshold = 2
 dynamic = True
 pausetime = 0.05 	# sec
 
-xresolution = 1+200
+xresolution = 1+2000
 
 #Note: spyder users need to enter the following command(without '#') before running the code 
 # %matplotlib auto
