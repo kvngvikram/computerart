@@ -1,7 +1,8 @@
+#!/usr/bin/env python
 from fortran_subroutines import julia_set_complex_polinomial
 import matplotlib.pyplot as plt
 
-# These are used in a string in exec()
+# These used only in save_image() function
 from PIL import Image
 from matplotlib import cm
 import numpy as np
@@ -11,12 +12,17 @@ p = 2
 min_x = -1.8
 max_x = 1.8
 center_y = 0
-aspect_ratio = 16/9
-x_res = 640
+# aspect_ratio = 16/9
+aspect_ratio = 4/3
+x_res = 480
+# x_res = 640
 # x_res = 1920
 zoom_scale = 0.3
-max_value = 2
+escape_rad = 2
 max_iter = 5000
+
+# For now colormap function name should be changed in save_image() function
+# seperately
 colormap = 'gist_rainbow'
 image_file_name = 'image.png'
 
@@ -32,7 +38,7 @@ ax.set_ylabel('Imaginary axis')
 
 def replot(min_x, max_x, min_y, max_y, axis):
     data = julia_set_complex_polinomial(
-        min_x, max_x, min_y, max_y, x_res, y_res, c, p, max_iter, max_value)
+        min_x, max_x, min_y, max_y, x_res, y_res, c, p, max_iter, escape_rad)
     axis.clear()
     axis.imshow((data), extent=[min_x, max_x, min_y, max_y],
                 cmap=colormap)
@@ -43,7 +49,7 @@ def replot(min_x, max_x, min_y, max_y, axis):
                    + '{:0.2f}'.format(c.real) + '+' + '{:0.2f}'.format(c.imag)
                    + 'i' + ', P ='
                    + '{:0.2f}'.format(p.real) + '+' + '{:0.2f}'.format(p.imag)
-                   + 'i' + ', Escape radius = ' + str(max_value)
+                   + 'i' + ', Escape radius = ' + str(escape_rad)
                    + ', Max iterations = ' + str(max_iter))
     plt.draw()  # this is required
 
@@ -91,13 +97,13 @@ def click(event):
 
 cid1 = fig.canvas.mpl_connect('scroll_event', resize)
 cid2 = fig.canvas.mpl_connect('button_press_event', click)
-print('Scroll to zoom, right click to go to default ranges.')
-print('Double click to get:')
+print('Scroll to zoom, double click to go to default ranges, right click to \
+        save as image.')
+print('Single click to get:')
 print('min_x\tmax_x\tmin_y\tmax_y\tc\tp')
 
 
 fig.tight_layout()
 mng = plt.get_current_fig_manager()
 mng.window.showMaximized()
-# fig.savefig('tmp.png')
 plt.show()
