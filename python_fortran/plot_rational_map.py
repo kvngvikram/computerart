@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 # These used only in save_image() function
 from PIL import Image
 from matplotlib.cm import hot as my_cmap
+# from matplotlib.cm import gist_rainbow as my_cmap
 import numpy as np
 
 c = -0.512511498387847167 + 0.521295573094847167j
@@ -20,7 +21,7 @@ zoom_scale = 0.3
 escape_rad = 4
 max_iter = 300
 
-image_file_name = 'image.png'
+image_file_name = 'tmp/tmp_image.png'
 
 min_y = center_y - (max_x - min_x)/(2*aspect_ratio)
 max_y = center_y + (max_x - min_x)/(2*aspect_ratio)
