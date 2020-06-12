@@ -7,12 +7,14 @@ integer                          :: x_res, y_res  ! number of points
 real                             :: min_x, max_x, min_y, max_y
 character(:), allocatable        :: npy_save_file_name
 
-integer                          :: max_iter=5
-complex                          :: c = (0,1), power = (2,0)
+integer                          :: max_iter=30
+real                             :: max_value=2
+complex                          :: c = (0,1), p = (2,0)
 
 complex, allocatable             :: z(:,:)
+integer, allocatable             :: n(:,:)
 
-integer                          :: i, j   ! can also be used temporarily
+integer                          :: i, j, k   ! can also be used temporarily
 character(:), allocatable        :: tmp_str
 
 !!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>!!
@@ -85,34 +87,40 @@ print*, 'numpy .npy format save file name: ', npy_save_file_name
 
 !!! allocate z to required size
 allocate(z(y_res,x_res))
+allocate(n(y_res,x_res))
 
 !!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>!!
 !!                                 preperation
 !!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>!!
 z = 0
-! c = 0
 do concurrent (i=0:x_res-1)
     z(:,i+1) = z(:,i+1) + cmplx(min_x + i*(max_x-min_x)/(x_res-1),0)
-    ! c(:,i+1) = c(:,i+1) + cmplx(min_x + i*(max_x-min_x)/(x_res-1),0)
 end do
 do concurrent (i=0:y_res-1)
     z(i+1,:) = z(i+1,:) + cmplx(0, max_y - i*(max_y-min_y)/(y_res-1))
-    ! c(i+1,:) = c(i+1,:) + cmplx(0, max_y - i*(max_y-min_y)/(y_res-1))
 end do
 
 !!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>!!
 !!                                 calculation
 !!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>!!
-do i=1,max_iter
-    z = z**power + c
+do concurrent (i=1:x_res)
+    do concurrent (j=1:y_res)
+        k = 0
+        do while (k<max_iter .and. abs(z(j,i)) < max_value)
+            z(j,i) = z(j,i)**p + c
+            k = k + 1
+        end do
+        n(j,i) = k
+    end do
 end do
 
 !!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>!!
 !!                                   saving
 !!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>!!
-call save_npy(npy_save_file_name,log(abs(z)))  ! from m_npy module
+call save_npy(npy_save_file_name,n)  ! from m_npy module
 
 !!! better deallocate it
 deallocate(z)
+deallocate(n)
 
 end program julia_set_complex_polinomial
